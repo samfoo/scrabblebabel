@@ -11,7 +11,7 @@ scores = {
 distribution = {
   'a':16, 'b': 4, 'c':6, 'd':8, 'e':24, 'f': 4, 'g':5, 'h':5, 'i':13,
   'j': 2, 'k': 2, 'l':7, 'm':6, 'n':13, 'o':15, 'p':4, 'q':2, 'r':13,
-  's':10, 't':15, 'u':7, 'v':3, 'w': 4, 'x': 2, 'y':4, 'z':2, '_': 0
+  's':10, 't':15, 'u':7, 'v':3, 'w': 4, 'x': 2, 'y':4, 'z':2, '_': 2 
 }
 
 class Bag:
@@ -40,7 +40,7 @@ class Bag:
   def draw(self, letter):
     if len(self.bag) == 0:
       raise BagError("The bag is empty.")
-    elif letter not in bag:
+    elif letter not in self.bag:
       raise BagError("There are no more `%s' remaining in the bag." % letter)
     else:
-      self.bag.remove(self.bag.index(letter))
+      self.bag.remove(letter)

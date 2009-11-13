@@ -60,7 +60,7 @@ class Player:
     rack = self._random_rack(bag_copy, rack)
 
     # Play the next best move
-    best = self._best_move(b, rack, depth, total)
+    best = self._best_move(board_copy, rack, depth, total)
 
     if best:
       return total + best[1]
@@ -86,7 +86,7 @@ class Player:
     return self._best_move(self.game.board, self.rack, 4, 0)
 
   def draw(self, letters):
-    self.rack += self.game.draw(self, letters)
+    self.rack += self.game.draw(letters)
 
   def play(self, word, tiles, start, end):
     try:
