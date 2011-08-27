@@ -239,10 +239,12 @@ class Board (object):
       if not self._is_valid_place(letter, *square(i)):
         raise BoardError("Illegal play [%d,%d]." % (square(i)[0], square(i)[1]))
 
+    score = self.score(word, start, end)
+
     for i, letter in enumerate(word):
       self._place(letter, *square(i))
 
-    return self.score(word, start, end)
+    return score
 
   def _is_anchor(self, x, y):
     if x + 1 >= GRID_SIZE or x - 1 < 0 or \
