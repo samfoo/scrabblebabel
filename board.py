@@ -48,7 +48,7 @@ class Board (object):
 
     # Initialize the word search from the dictionary.
     for line in words:
-      self.dawg.insert(unicode(line.strip(), 'UTF-8'))
+      self.dawg.insert(language.normalize(unicode(line.strip(), 'UTF-8')))
 
   def __repr__(self):
     """Returns the string representation of the current board.
