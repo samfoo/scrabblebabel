@@ -128,7 +128,7 @@ class Board (object):
     score = 0
 
     # Score each letter, including the letter bonuses.
-    for i, letter in enumerate(word):
+    for i, letter in enumerate(self.dawg.tokenize(word)):
       score += self._get_letter_score(letter,square(i))
 
     # Score any cross words that were created.

@@ -19,11 +19,12 @@ class Dawg (object):
     return self._rnode(self.root, self.tokenize(word))
 
   def pivot_search(self, substring):
-    print "pivot searching %r" % substring
     results = []
 
+    tokens = self.tokenize(substring)
+
     # Check if this node is the start of the substring.
-    pivot = substring.index('.')
+    pivot = tokens.index('.')
     matches = self._rmatch_string(self.root, self.tokenize(substring), [])
 
     for m in matches:
