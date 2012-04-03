@@ -1,8 +1,6 @@
 from dawg import *
 from bag import *
 
-DICTIONARY = "scrabble.txt"
-
 # Location of special squares.
 #   T triple word
 #   t triple letter
@@ -32,7 +30,7 @@ class BoardError (Exception):
   pass
 
 class Board (object):
-  def __init__(self, words=open(DICTIONARY), language=en):
+  def __init__(self, language=en):
     self.dawg = Dawg(digraphs=[k for k in language.scores.keys() if len(k) > 1])
     self.grid = []
     self.language = language
@@ -47,7 +45,7 @@ class Board (object):
       self.grid.append(['.'] * 15)
 
     # Initialize the word search from the dictionary.
-    for line in words:
+    for line in open(language.dictionary):
       self.dawg.insert(language.normalize(unicode(line.strip(), 'UTF-8')))
 
   def __repr__(self):

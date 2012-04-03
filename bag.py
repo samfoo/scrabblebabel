@@ -3,6 +3,8 @@
 from random import randint
 
 class en:
+  dictionary = 'en.txt'
+
   scores = {
     'a':1, 'b':3, 'c':3, 'd':2, 'e':1, 'f':4, 'g':2, 'h':4, 'i':1,
     'j':8, 'k':5, 'l':1, 'm':3, 'n':1, 'o':1, 'p':3, 'q':10, 'r':1,
@@ -20,6 +22,7 @@ class en:
     return word
 
 class es:
+  dictionary = 'es.txt'
   scores = {
     'a':1, 'b':3, 'c':3, 'd':2, 'e':1, 'f':4, 'g':2, 'h':4, 'i':1,
     'j':8, 'l':1, 'm':3, 'n':1, 'o':1, 'p':3, 'q':5, 'r':1, 's':1,
