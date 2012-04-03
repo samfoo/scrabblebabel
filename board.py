@@ -33,7 +33,7 @@ class BoardError (Exception):
 
 class Board (object):
   def __init__(self, words=open(DICTIONARY), language=en):
-    self.dawg = Dawg()
+    self.dawg = Dawg(digraphs=[k for k in language.scores.keys() if len(k) > 1])
     self.grid = []
     self.language = language
 
@@ -89,7 +89,7 @@ class Board (object):
     self._transposed = True
     anchors = self.anchors()
     for a in anchors:
-      imoves += self._get_moves(a, rack)
+      imoves += self._get_moves(a, self.dawg.tokenize(rack))
     imoves = [(m[0], m[1], self._coord(*m[2]), self._coord(*m[3]), self.score(*m[1:])) for m in imoves]
     self._transposed = False
 
@@ -148,10 +148,10 @@ class Board (object):
   def cross_section(self, x, y):
     """Returns the vertical cross-section of a square. That is, the  letters
     directly adjacent to the top and bottom of a square.
-    
+
     @param x: The x coord.
     @param y: The y coord.
-    
+
     @returns: A string with the letters surrounding a blank square 
       (i.e. `sam.le') or a single `.' character."""
 
@@ -174,10 +174,10 @@ class Board (object):
   def cross_set(self, x, y):
     """Returns a list of the characters which create valid words (vertically)
     with a square's cross-section.
-    
+
     @param x: The x coord.
     @param y: The y coord.
-    
+
     @returns: A list of characters."""
 
     s = self.square(x,y)
@@ -205,7 +205,7 @@ class Board (object):
         # tile which is already on the board.
         row_anchors = filter(lambda s: self._is_anchor(s, row), xrange(GRID_SIZE))
         self._cached_anchors += zip(row_anchors,[row] * len(row_anchors))
-      
+
       self._anchors_dirty = False
 
     return self._cached_anchors
@@ -344,10 +344,10 @@ class Board (object):
 
   def _get_moves(self, anchor, rack):
     """Gets all legal `across' moves at a given square with a given rack.
-    
+
     @param anchor: An (x, y) tuple to start looking for a prefix.
-    @param rack: A string of the letters available to play.
-    
+    @param rack: A list of the tiles available to play.
+
     @returns: A list of 3-tuple's in the following format...
       (`word', start, end)"""
 

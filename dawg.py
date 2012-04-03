@@ -1,32 +1,46 @@
 class Dawg (object):
-  def __init__(self):
+  def __init__(self, digraphs=[]):
     self.root = self.index = 0
 
+    self.digraphs = digraphs
     self.graph = {self.root: []}
     self.accepts = {}
 
+  def tokenize(self, word):
+    return self._rtokenize(word, [])
+
   def insert(self, word):
-    self._rinsert(self.root, word, word)
+    self._rinsert(self.root, self.tokenize(word), word)
 
   def words(self):
     return self.accepts.values()
 
-  def search(self, rack, anchor, board, limit):
-    return self._rleft_part(self.root, '', limit, rack, board, anchor, [])
-
   def node(self, word):
-    return self._rnode(self.root, word)
+    return self._rnode(self.root, self.tokenize(word))
 
   def pivot_search(self, substring):
+    print "pivot searching %r" % substring
     results = []
 
     # Check if this node is the start of the substring.
     pivot = substring.index('.')
-    matches = self._rmatch_string(self.root, substring, [])
+    matches = self._rmatch_string(self.root, self.tokenize(substring), [])
+
     for m in matches:
-      results += [m[pivot]]
+      results += [self.tokenize(m)[pivot]]
 
     return results
+
+  def _rtokenize(self, word, tokens):
+    if len(word) == 0:
+      return tokens
+
+    digraph = [dg for dg in self.digraphs if word.startswith(dg)]
+
+    if len(digraph) > 0:
+      return self._rtokenize(word[2:], tokens + [digraph[0]])
+    else:
+      return self._rtokenize(word[1:], tokens + [word[0]])
 
   def _rinsert(self, node, word, orig):
     try:
@@ -52,16 +66,16 @@ class Dawg (object):
       if node not in self.accepts:
         self.accepts[node] = orig
 
-  def _rmatch_string(self, node, string, results):
-    if len(string) == 0:
+  def _rmatch_string(self, node, tokens, results):
+    if len(tokens) == 0:
       if node in self.accepts:
         results += [self.accepts[node]]
       return results
 
-    letter = string[0]
+    letter = tokens[0]
     for e in self.graph[node]:
       if letter == e[0] or '.' == letter:
-        results = self._rmatch_string(e[1], string[1:], results)
+        results = self._rmatch_string(e[1], tokens[1:], results)
 
     return results
 
