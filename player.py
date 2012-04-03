@@ -12,17 +12,17 @@ class Player:
     self.game = game
 
   def _random_rack(self, bag, existing=None):
-	# Create a random rack where tile occurance is weighted to the current bag.
-	if existing:
-	  count = 7 - len(existing)
-	else:
-	  count = min(len(bag.bag), 7)
-	
-	ret = [bag.random(draw = False) for i in xrange(count)]
-	if existing: 
-	  ret = existing + ret
-	
-	return ret
+    # Create a random rack where tile occurance is weighted to the current bag.
+    if existing:
+      count = 7 - len(existing)
+    else:
+      count = min(len(bag.bag), 7)
+
+    ret = [bag.random(draw = False) for i in xrange(count)]
+    if existing: 
+      ret = existing + ret
+
+    return ret
 
   def _average_random(self, board, bag):
     # TODO: Parallelize this method.
@@ -68,7 +68,7 @@ class Player:
       return total
 
   def _best_move(self, board, rack, depth, total):
-	# For each of the top moves available, find the score delta.
+    # For each of the top moves available, find the score delta.
     ms = board.moves(rack)[:depth]
     best = None
 

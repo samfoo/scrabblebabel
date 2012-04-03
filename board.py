@@ -32,9 +32,10 @@ class BoardError (Exception):
   pass
 
 class Board (object):
-  def __init__(self, words = open(DICTIONARY)):
+  def __init__(self, words=open(DICTIONARY), language=en):
     self.dawg = Dawg()
     self.grid = []
+    self.language = language
 
     self._transposed = False
 
@@ -47,7 +48,7 @@ class Board (object):
 
     # Initialize the word search from the dictionary.
     for line in words:
-      self.dawg.insert(line.strip())
+      self.dawg.insert(unicode(line.strip(), 'UTF-8'))
 
   def __repr__(self):
     """Returns the string representation of the current board.
@@ -183,7 +184,7 @@ class Board (object):
     if '.' == s:
       cross_section = self.cross_section(x, y)
       if '.' == cross_section:
-        return list("abcdefghijklmnopqrstuvwxyz")
+        return [c for c in self.language.scores.keys() if c != '_']
       else:
         return self.dawg.pivot_search(cross_section)
     else:
@@ -285,7 +286,7 @@ class Board (object):
     for i in xrange(len(word)):
       cross_section = self.cross_section(*iter(i))
       if '.' == self.square(*iter(i)) and ('.' == cross_section[0] or '.' == cross_section[-1]):
-        score += reduce(lambda a, b: a + b, map(lambda c: scores[c], cross_section.replace('.', '')), 0)
+        score += reduce(lambda a, b: a + b, map(lambda c: self.language.scores[c], cross_section.replace('.', '')), 0)
 
     return score
 
@@ -318,10 +319,10 @@ class Board (object):
 
     if '.' == self.square(x, y):
       if SPECIAL[y][x] == 'd':
-        return scores[letter] * 2
+        return self.language.scores[letter] * 2
       elif SPECIAL[y][x] == 't':
-        return scores[letter] * 3
-    return scores[letter]
+        return self.language.scores[letter] * 3
+    return self.language.scores[letter]
 
   def _get_prefix(self, anchor):
     """Returns the string prefix of characters already on the board of a given
